@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import BookmarkCard from './components/BookmarkCard'
+import axios from "axios";
+import cors from 'cors'
 import './Home.css'
 
 const API_BASE = 'http://localhost:8080/api/bookmarks'
@@ -19,10 +21,9 @@ const Home = () => {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(API_BASE)
-      if (!res.ok) throw new Error('Network response was not ok')
-      const data = await res.json()
-      setBookmarks(Array.isArray(data) ? data : [])
+      const res = await axios.get(API_BASE)
+
+      setBookmarks(Array.isArray(res.data) ? res.data : [])
     } catch (err) {
       console.warn('Failed to fetch bookmarks, falling back to empty list', err)
       setError('Could not load bookmarks')
